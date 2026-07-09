@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="グランド・アジュール・ホテル フロントデスク管理システム。チェックイン・チェックアウト業務を効率的に管理します。">
+  <title>フロントデスク | グランド・アジュール・ホテル</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/front-desk.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛎️</text></svg>">
+</head>
+<body>
+
+  <!-- Background Animation -->
+  <div class="bg-animation">
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+    <div class="bg-orb"></div>
+  </div>
+
+  <!-- App Container -->
+  <div class="app-container">
+
+    <!-- Header -->
+    <header class="site-header">
+      <div class="hotel-brand">
+        <div class="hotel-star-line">★ ★ ★ ★ ★</div>
+        <h1 class="hotel-name">
+          Grand Azure Hotel
+          <span>グランド・アジュール・ホテル</span>
+        </h1>
+        <div class="header-subtitle">🛎️ フロントデスク管理システム</div>
+        <a href="index.html" class="nav-link">← 予約システムに戻る</a>
+      </div>
+    </header>
+
+    <!-- Status Dashboard -->
+    <div class="status-dashboard">
+      <div class="status-card">
+        <div class="status-number" id="stat-total">0</div>
+        <div class="status-label">全客室</div>
+      </div>
+      <div class="status-card available">
+        <div class="status-number" id="stat-available">0</div>
+        <div class="status-label">空室</div>
+      </div>
+      <div class="status-card occupied">
+        <div class="status-number" id="stat-occupied">0</div>
+        <div class="status-label">使用中</div>
+      </div>
+      <div class="status-card today">
+        <div class="status-number" id="stat-today">0</div>
+        <div class="status-label">本日CI</div>
+      </div>
+    </div>
+
+    <!-- Room Status Panel -->
+    <div class="room-status-panel" style="max-width: 780px; margin: 0 auto 36px; padding: 0 24px;">
+      <button class="room-status-toggle glass-card" id="room-status-toggle" onclick="toggleRoomPanel()">
+        <span>🗺️ 客室ステータス一覧</span>
+        <span class="toggle-arrow" id="toggle-arrow">▼</span>
+      </button>
+      <div class="room-status-grid-wrapper" id="room-status-wrapper" style="display: none;">
+        <div class="glass-card" style="margin-top: 2px; border-top-left-radius: 0; border-top-right-radius: 0;">
+          <div id="room-status-grid">
+            <!-- Rendered by JS -->
+          </div>
+          <div class="room-legend">
+            <span class="legend-item"><span class="legend-dot available"></span> 空室</span>
+            <span class="legend-item"><span class="legend-dot occupied"></span> 使用中</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab Switcher -->
+    <div class="tab-switcher">
+      <button class="tab-btn active" data-tab="checkin">
+        <span class="tab-icon">🔑</span> チェックイン
+      </button>
+      <button class="tab-btn" data-tab="checkout">
+        <span class="tab-icon">🚪</span> チェックアウト
+      </button>
+      <div class="tab-slider"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="steps-wrapper">
+
+      <!-- ===== CHECK-IN Panel ===== -->
+      <div class="fd-panel active" id="panel-checkin">
+
+        <!-- Search -->
+        <div class="glass-card search-card">
+          <div class="search-icon-header">
+            <span class="icon">🔍</span>
+          </div>
+          <label class="form-label" for="checkin-input">予約番号を入力</label>
+          <div class="search-input-group">
+            <div class="form-group">
+              <input type="text" class="form-input" id="checkin-input"
+                     placeholder="例: GAH-20260709-ABC123"
+                     autocomplete="off"
+                     style="text-transform: uppercase; letter-spacing: 0.08em; font-family: var(--font-mono);">
+            </div>
+            <button class="btn btn-primary" id="checkin-search-btn">検索</button>
+          </div>
+        </div>
+
+        <!-- Alert -->
+        <div class="fd-alert" id="checkin-alert">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"></span>
+        </div>
+
+        <!-- Result -->
+        <div class="fd-result" id="checkin-result">
+          <div class="glass-card">
+            <div id="checkin-result-content">
+              <!-- Rendered by JS -->
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-primary btn-lg" id="checkin-confirm-btn">
+                ✓ チェックインを確定
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success -->
+        <div class="fd-success" id="checkin-success">
+          <div class="glass-card">
+            <div class="success-icon-wrapper">
+              <span class="success-check">✓</span>
+            </div>
+            <h2 class="success-title">チェックイン完了</h2>
+            <p class="success-subtitle">お客様に部屋番号とルームキーをお渡しください</p>
+            <div id="checkin-success-content">
+              <!-- Rendered by JS -->
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-reset" id="checkin-reset-btn">
+                🔄 次のチェックインへ
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CHECK-OUT Panel ===== -->
+      <div class="fd-panel" id="panel-checkout">
+
+        <!-- Search -->
+        <div class="glass-card search-card">
+          <div class="search-icon-header">
+            <span class="icon">🚪</span>
+          </div>
+          <label class="form-label" for="checkout-input">部屋番号を入力</label>
+          <div class="search-input-group">
+            <div class="form-group">
+              <input type="text" class="form-input" id="checkout-input"
+                     placeholder="例: 501"
+                     autocomplete="off"
+                     style="letter-spacing: 0.1em; font-family: var(--font-mono); font-size: 1.1rem;">
+            </div>
+            <button class="btn btn-primary" id="checkout-search-btn">検索</button>
+          </div>
+        </div>
+
+        <!-- Alert -->
+        <div class="fd-alert" id="checkout-alert">
+          <span class="alert-icon">⚠️</span>
+          <span class="alert-text"></span>
+        </div>
+
+        <!-- Result -->
+        <div class="fd-result" id="checkout-result">
+          <div class="glass-card">
+            <div id="checkout-result-content">
+              <!-- Rendered by JS -->
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-primary btn-lg" id="checkout-confirm-btn">
+                ✓ チェックアウト・精算完了
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Success -->
+        <div class="fd-success" id="checkout-success">
+          <div class="glass-card">
+            <div class="success-icon-wrapper">
+              <span class="success-check">✓</span>
+            </div>
+            <h2 class="success-title">チェックアウト完了</h2>
+            <p class="success-subtitle">精算が完了しました。お客様のまたのご利用をお待ちしております。</p>
+            <div id="checkout-success-content">
+              <!-- Rendered by JS -->
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-reset" id="checkout-reset-btn">
+                🔄 次のチェックアウトへ
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <p>&copy; 2026 Grand Azure Hotel — グランド・アジュール・ホテル. All rights reserved.</p>
+      <p style="margin-top: 8px;">フロントデスク管理システム v1.0 ｜ <a href="index.html">予約システム</a></p>
+    </footer>
+
+  </div>
+
+  <script src="js/shared-data.js"></script>
+  <script src="js/front-desk.js"></script>
+</body>
+</html>
