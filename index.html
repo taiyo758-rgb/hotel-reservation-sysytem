@@ -67,6 +67,10 @@
         </div>
         <!-- Alert for validation -->
         <div id="alert-container" class="alert" style="margin-top: 15px;"></div>
+        
+        <div style="margin-top: 15px; font-size: 0.85rem;">
+          <a href="#" id="open-cancel-modal" style="color: var(--color-gold); text-decoration: underline;">＞ 予約の確認・キャンセル</a>
+        </div>
       </div>
     </div>
 
@@ -281,6 +285,50 @@
     </div>
 
   </main>
+
+  <!-- Cancellation Modal -->
+  <div class="cancel-modal-overlay" id="cancel-modal">
+    <div class="cancel-modal">
+      <button class="cancel-modal-close" id="close-cancel-modal">&times;</button>
+      
+      <!-- Step 1: Enter reservation number -->
+      <div id="cancel-step-1">
+        <h2 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 10px;">予約の確認・キャンセル</h2>
+        <p style="color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 30px;">予約番号を入力してください。</p>
+        
+        <div class="form-group">
+          <label class="form-label" for="cancel-reservation-number">予約番号</label>
+          <input type="text" id="cancel-reservation-number" class="form-input" placeholder="例: GAH-1234-567">
+        </div>
+        <div id="cancel-alert" class="alert" style="margin-bottom: 15px;"></div>
+        <button class="btn btn-primary btn-block" id="cancel-search-btn">予約を検索</button>
+      </div>
+      
+      <!-- Step 2: Show reservation details & confirm cancel -->
+      <div id="cancel-step-2" style="display: none;">
+        <h2 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 10px;">予約内容</h2>
+        <p style="color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 20px;">以下の予約をキャンセルしますか？</p>
+        
+        <div id="cancel-reservation-details" style="background: var(--color-bg-secondary); border: 1px solid var(--color-border); padding: 20px; margin-bottom: 20px;">
+          <!-- Rendered via JS -->
+        </div>
+        
+        <div style="display: flex; gap: 15px;">
+          <button class="btn btn-outline" id="cancel-back-btn" style="flex: 1;">戻る</button>
+          <button class="btn btn-primary" id="cancel-confirm-btn" style="flex: 1; background: var(--color-error);">予約をキャンセルする</button>
+        </div>
+      </div>
+      
+      <!-- Step 3: Cancellation complete -->
+      <div id="cancel-step-3" style="display: none; text-align: center;">
+        <div style="font-size: 3rem; color: var(--color-gold); margin-bottom: 15px;">✓</div>
+        <h2 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 10px;">キャンセル完了</h2>
+        <p style="color: var(--color-text-secondary); font-size: 0.9rem; margin-bottom: 10px;">以下の予約をキャンセルしました。</p>
+        <div id="cancel-complete-number" style="font-size: 1.2rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 30px;"></div>
+        <button class="btn btn-primary" id="cancel-done-btn">閉じる</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer class="site-footer">

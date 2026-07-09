@@ -555,3 +555,170 @@ function launchConfetti() {
     }
   }());
 }
+
+// ========== Cancellation Flow ==========
+
+let cancelTarget = null; // Holds the reservation being cancelled
+
+// Bind cancel modal events after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // Open modal
+  document.getElementById('open-cancel-modal').addEventListener('click', (e) => {
+    e.preventDefault();
+    openCancelModal();
+  });
+
+  // Close modal
+  document.getElementById('close-cancel-modal').addEventListener('click', closeCancelModal);
+  document.getElementById('cancel-modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeCancelModal();
+  });
+
+  // Search
+  document.getElementById('cancel-search-btn').addEventListener('click', cancelSearchReservation);
+
+  // Enter key on input
+  document.getElementById('cancel-reservation-number').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') cancelSearchReservation();
+  });
+
+  // Back button
+  document.getElementById('cancel-back-btn').addEventListener('click', () => {
+    document.getElementById('cancel-step-2').style.display = 'none';
+    document.getElementById('cancel-step-1').style.display = 'block';
+    cancelTarget = null;
+  });
+
+  // Confirm cancel
+  document.getElementById('cancel-confirm-btn').addEventListener('click', executeCancellation);
+
+  // Done button
+  document.getElementById('cancel-done-btn').addEventListener('click', closeCancelModal);
+});
+
+function openCancelModal() {
+  // Reset to step 1
+  document.getElementById('cancel-step-1').style.display = 'block';
+  document.getElementById('cancel-step-2').style.display = 'none';
+  document.getElementById('cancel-step-3').style.display = 'none';
+  document.getElementById('cancel-reservation-number').value = '';
+  document.getElementById('cancel-alert').classList.remove('visible');
+  cancelTarget = null;
+
+  document.getElementById('cancel-modal').classList.add('visible');
+}
+
+function closeCancelModal() {
+  document.getElementById('cancel-modal').classList.remove('visible');
+  cancelTarget = null;
+}
+
+function cancelSearchReservation() {
+  const input = document.getElementById('cancel-reservation-number').value.trim();
+  const alertEl = document.getElementById('cancel-alert');
+
+  if (!input) {
+    alertEl.textContent = '予約番号を入力してください。';
+    alertEl.className = 'alert alert-error visible';
+    return;
+  }
+
+  const reservation = HotelData.findReservation(input);
+
+  if (!reservation) {
+    alertEl.textContent = '入力された予約番号は見つかりません。予約番号をご確認ください。';
+    alertEl.className = 'alert alert-error visible';
+    return;
+  }
+
+  if (reservation.status === 'cancelled') {
+    alertEl.textContent = 'この予約は既にキャンセル済みです。';
+    alertEl.className = 'alert alert-warning visible';
+    return;
+  }
+
+  if (reservation.status === 'checked-in') {
+    alertEl.textContent = 'この予約は既にチェックイン済みのため、キャンセルできません。';
+    alertEl.className = 'alert alert-warning visible';
+    return;
+  }
+
+  alertEl.classList.remove('visible');
+  cancelTarget = reservation;
+
+  // Render details
+  const detailsEl = document.getElementById('cancel-reservation-details');
+  const statusLabel = getStatusLabel(reservation.status);
+
+  detailsEl.innerHTML = `
+    <div class="cancel-detail-row">
+      <span class="cancel-detail-label">予約番号</span>
+      <span class="cancel-detail-value">${reservation.reservationNumber}</span>
+    </div>
+    <div class="cancel-detail-row">
+      <span class="cancel-detail-label">ステータス</span>
+      <span class="cancel-detail-value"><span class="cancel-status-badge ${reservation.status}">${statusLabel}</span></span>
+    </div>
+    <div class="cancel-detail-row">
+      <span class="cancel-detail-label">お名前</span>
+      <span class="cancel-detail-value">${reservation.guestInfo.name} 様</span>
+    </div>
+    <div class="cancel-detail-row">
+      <span class="cancel-detail-label">客室タイプ</span>
+      <span class="cancel-detail-value">${reservation.roomTypeName}</span>
+    </div>
+    <div class="cancel-detail-row">
+      <span class="cancel-detail-label">チェックイン</span>
+      <span class="cancel-detail-value">${formatDateJP(new Date(reservation.checkIn))}</span>
+    </div>
+    <div class="cancel-detail-row">
+      <span class="cancel-detail-label">チェックアウト</span>
+      <span class="cancel-detail-value">${formatDateJP(new Date(reservation.checkOut))}</span>
+    </div>
+    <div class="cancel-detail-row">
+      <span class="cancel-detail-label">合計金額</span>
+      <span class="cancel-detail-value" style="font-size: 1.1rem; color: var(--color-gold);">¥${reservation.totalPrice.toLocaleString()}</span>
+    </div>
+  `;
+
+  // Show step 2
+  document.getElementById('cancel-step-1').style.display = 'none';
+  document.getElementById('cancel-step-2').style.display = 'block';
+}
+
+function executeCancellation() {
+  if (!cancelTarget) return;
+
+  // 1. Update reservation status to 'cancelled'
+  HotelData.updateReservation(cancelTarget.reservationNumber, {
+    status: 'cancelled',
+    cancelledAt: new Date().toISOString()
+  });
+
+  // 2. Increase room availability (空室を一つ増やす)
+  const roomType = cancelTarget.roomType;
+  const roomIndex = roomsData.findIndex(r => r.type === roomType);
+  if (roomIndex !== -1) {
+    roomsData[roomIndex].available = Math.min(
+      roomsData[roomIndex].totalRooms,
+      roomsData[roomIndex].available + 1
+    );
+  }
+
+  // 3. Show completion
+  document.getElementById('cancel-complete-number').textContent = cancelTarget.reservationNumber;
+  document.getElementById('cancel-step-2').style.display = 'none';
+  document.getElementById('cancel-step-3').style.display = 'block';
+
+  cancelTarget = null;
+}
+
+function getStatusLabel(status) {
+  switch (status) {
+    case 'reserved': return '予約済み';
+    case 'checked-in': return 'チェックイン済み';
+    case 'checked-out': return 'チェックアウト済み';
+    case 'cancelled': return 'キャンセル済み';
+    default: return status;
+  }
+}
