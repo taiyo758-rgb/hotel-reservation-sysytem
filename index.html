@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>グランド・アジュール・ホテル 東京 | 公式サイト</title>
+  <title>グランド・アジュール・ホテル 東京 | 予約管理システム</title>
   <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-  <!-- Header & Navigation -->
+  <!-- Header -->
   <header class="site-header">
     <div class="header-logo">
       <span class="logo-icon">⚜️</span>
@@ -17,20 +17,14 @@
       <span class="logo-sub">東京</span>
     </div>
     <nav class="main-nav">
-      <a href="#" class="nav-item active">宿泊</a>
-      <a href="#" class="nav-item">レストラン・バー</a>
-      <a href="#" class="nav-item">ホテルショップ</a>
-      <a href="#" class="nav-item">宴会・会議</a>
-      <a href="#" class="nav-item">ウエディング</a>
-      <a href="#" class="nav-item">イベント</a>
-      <a href="#" class="nav-item">館内施設・アクセス</a>
+      <a href="index.html" class="nav-item active">予約する</a>
+      <a href="#" class="nav-item" id="nav-cancel-link">予約キャンセル</a>
+      <a href="front-desk.html" class="nav-item">チェックイン / チェックアウト</a>
     </nav>
   </header>
 
-  <!-- Hero Section (Visible initially) -->
-  <section class="hero-section" id="hero-section">
-    <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="ラグジュアリールーム" class="hero-image">
-  </section>
+  <!-- Hero Section (hidden placeholder for JS compatibility) -->
+  <section class="hero-section" id="hero-section" style="display: none;"></section>
 
   <!-- Main Content Wrapper (Hidden during booking flow) -->
   <div id="home-content-wrapper">
@@ -40,7 +34,6 @@
       <div class="booking-widget">
         <div class="booking-tabs">
           <div class="booking-tab active">宿泊予約</div>
-          <div class="booking-tab">レストラン予約</div>
         </div>
         
         <div class="booking-form">
@@ -73,111 +66,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Recommendations Section -->
-    <section class="content-section">
-      <div class="section-header">
-        <h2 class="section-title">おすすめ情報・プラン</h2>
-      </div>
-      <div class="grid-container">
-        <div class="card-grid">
-          <div class="card">
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1542314831-c6a4d142104d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Topic 1" class="card-img">
-            </div>
-            <div class="card-label">TOPICS</div>
-            <h3 class="card-title">初夏の特別ディナーコース</h3>
-          </div>
-          <div class="card">
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Topic 2" class="card-img">
-            </div>
-            <div class="card-label">PLAN</div>
-            <h3 class="card-title">スパ・ウェルネスステイ</h3>
-          </div>
-          <div class="card">
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Topic 3" class="card-img">
-            </div>
-            <div class="card-label">TOPICS</div>
-            <h3 class="card-title">ラウンジでのアフタヌーンティー</h3>
-          </div>
-          <div class="card">
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1490130635489-33b28b7e2311?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Topic 4" class="card-img">
-            </div>
-            <div class="card-label">TOPICS</div>
-            <h3 class="card-title">今月のロビー装花</h3>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Rooms Section -->
-    <section class="content-section white">
-      <div class="section-header">
-        <h2 class="section-title">客室</h2>
-      </div>
-      <div class="featured-layout">
-        <div class="featured-text">
-          <h3>都心のホテルステイでゆったりと安心して過ごす</h3>
-          <p>記念日でのご宿泊やご家族での滞在など、お客様の目的、人数にあわせて多彩なお部屋タイプをご用意しております。いずれのお部屋も快適性を備え、ビジネスでのご利用にも最適です。</p>
-          <a href="#" class="btn btn-outline">客室のご案内</a>
-        </div>
-        <div class="featured-image">
-          <img src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Imperial Floor Suite">
-          <div class="featured-caption">グランド・アジュール・フロア プレミアスイート</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Facilities Section -->
-    <section class="content-section">
-      <div class="section-header">
-        <h2 class="section-title">設備・サービス</h2>
-      </div>
-      <div class="grid-container">
-        <div class="card-grid" style="grid-template-columns: repeat(3, 1fr);">
-          <div class="card">
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="朝食" class="card-img">
-            </div>
-            <h3 class="card-title" style="font-family: var(--font-sans); font-size: 0.9rem;">ご朝食のご案内</h3>
-          </div>
-          <div class="card">
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1584132905271-512c958d674a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="アメニティ" class="card-img">
-            </div>
-            <h3 class="card-title" style="font-family: var(--font-sans); font-size: 0.9rem;">客室備品・アメニティ</h3>
-          </div>
-          <div class="card">
-            <div class="card-img-wrapper">
-              <img src="https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="ルームサービス" class="card-img">
-            </div>
-            <h3 class="card-title" style="font-family: var(--font-sans); font-size: 0.9rem;">ルームサービス</h3>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contact & Booking -->
-    <section class="content-section white">
-      <div class="section-header">
-        <h2 class="section-title">ご予約・お問い合わせ</h2>
-      </div>
-      <div class="grid-container" style="max-width: 900px; display: flex; gap: 40px; background: #fdfdfd; border: 1px solid #eee; padding: 40px;">
-        <div style="flex: 1; text-align: center; border-right: 1px solid #ddd; padding-right: 40px;">
-          <h3 style="font-family: var(--font-serif); margin-bottom: 20px;">宿泊のご予約</h3>
-          <button class="btn btn-primary btn-block" style="margin-bottom: 20px;">宿泊予約</button>
-          <p style="font-size: 0.8rem; color: #666;">グランド・アジュール・ホテル 東京：客室予約係<br><strong style="font-size: 1.2rem; color: var(--color-gold); margin-top: 10px; display: block;">(03) 1234-5678</strong></p>
-        </div>
-        <div style="flex: 1; text-align: center;">
-          <h3 style="font-family: var(--font-serif); margin-bottom: 20px;">お問い合わせ</h3>
-          <button class="btn btn-outline btn-block" style="margin-bottom: 20px;">ご宿泊に関するお問い合わせ</button>
-          <p style="font-size: 0.8rem; color: #666; text-align: left;">※ 土日祝日や回答をお急ぎの場合は<br>お電話にてお問い合わせください。</p>
-        </div>
-      </div>
-    </section>
 
   </div> <!-- /home-content-wrapper -->
 
@@ -334,12 +222,9 @@
   <footer class="site-footer">
     <div class="footer-logo">グランド・アジュール・ホテル</div>
     <div class="footer-nav">
-      <a href="#">会社情報</a>
-      <a href="#">サステナビリティ</a>
-      <a href="#">ニュースリリース</a>
-      <a href="#">採用情報</a>
-      <a href="#">お問い合わせ</a>
-      <a href="front-desk.html">🛎️ フロントデスク管理システム</a>
+      <a href="index.html">予約する</a>
+      <a href="#" id="footer-cancel-link">予約キャンセル</a>
+      <a href="front-desk.html">🛎️ チェックイン / チェックアウト</a>
     </div>
     <div class="footer-bottom">
       &copy; 2026 Grand Azure Hotel. All rights reserved.

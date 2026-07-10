@@ -562,11 +562,29 @@ let cancelTarget = null; // Holds the reservation being cancelled
 
 // Bind cancel modal events after DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  // Open modal
+  // Open modal (booking widget link)
   document.getElementById('open-cancel-modal').addEventListener('click', (e) => {
     e.preventDefault();
     openCancelModal();
   });
+
+  // Open modal (nav link)
+  const navCancelLink = document.getElementById('nav-cancel-link');
+  if (navCancelLink) {
+    navCancelLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openCancelModal();
+    });
+  }
+
+  // Open modal (footer link)
+  const footerCancelLink = document.getElementById('footer-cancel-link');
+  if (footerCancelLink) {
+    footerCancelLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      openCancelModal();
+    });
+  }
 
   // Close modal
   document.getElementById('close-cancel-modal').addEventListener('click', closeCancelModal);
